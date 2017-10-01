@@ -12,7 +12,8 @@ mvn clean install
 ```
 java -jar SalasApplication-1.0.0.jar
 ```
-* [Acceder aplicación] (http://localhost:8080/salas/)
+* Acceder aplicación 
+(http://localhost:8080/salas/)
 
 ## Autor
 
