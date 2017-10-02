@@ -49,8 +49,13 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public boolean isReservaExist(Reservation reservation) {
 		// se valida la sala ya esta con reserva confirmada para la fecha
-		boolean exist = reservaRepository.findByRoomAndStatusAndDate(reservation.getRoom(),
-				EreservationStatus.CONFIRMADA, reservation.getDate()) != null;
+		boolean exist = false;
+
+		List<Reservation> prev = reservaRepository.findByRoomAndStatusAndDate(reservation.getRoom(),
+				EreservationStatus.CONFIRMADA, reservation.getDate());
+
+		exist = (prev != null && !prev.isEmpty());
+
 		if (!exist) {
 			// se valida que el mismo usuario no tenga una solicitud sobre la
 			// sala
