@@ -1,5 +1,5 @@
 package com.salas.springboot.test;
 
-public class RoomTests {
+public class UserServiceTests {
 
 }

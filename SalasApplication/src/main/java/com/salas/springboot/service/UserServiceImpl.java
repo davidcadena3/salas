@@ -16,63 +16,63 @@ import com.salas.springboot.repositories.UserRepository;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	public UserDTO findById(Long id) {
-		return convertToDTO(userRepository.findById(id));
+    public UserDTO findById(Long id) {
+	return convertToDTO(userRepository.findById(id));
+    }
+
+    @Override
+    public void saveUser(UserDTO usuario) {
+	userRepository.save(convertToEntity(usuario));
+    }
+
+    @Override
+    public UserDTO findByName(String name) {
+	return convertToDTO(userRepository.findByName(name));
+    }
+
+    @Override
+    public boolean isUserExist(UserDTO user) {
+	return findByName(user.getName()) != null;
+    }
+
+    @Override
+    public List<UserDTO> findAllUsers() {
+	List<UserDTO> users = null;
+	List<User> entitys = userRepository.findAll();
+
+	if (Objects.nonNull(entitys) && !entitys.isEmpty()) {
+	    users = new ArrayList<>();
+	    for (User user : entitys) {
+		users.add(convertToDTO(user));
+	    }
 	}
 
-	@Override
-	public void saveUser(UserDTO usuario) {
-		userRepository.save(convertToEntity(usuario));
+	return users;
+    }
+
+    public static UserDTO convertToDTO(User user) {
+	UserDTO dto = null;
+	if (Objects.nonNull(user)) {
+	    dto = new UserDTO();
+	    dto.setId(user.getId());
+	    dto.setName(user.getName());
+	    dto.setRol(user.getRol());
 	}
+	return dto;
+    }
 
-	@Override
-	public UserDTO findByName(String name) {
-		return convertToDTO(userRepository.findByName(name));
+    public static User convertToEntity(UserDTO user) {
+	User entity = null;
+	if (Objects.nonNull(user)) {
+	    entity = new User();
+	    entity.setId(user.getId());
+	    entity.setName(user.getName());
+	    entity.setRol(user.getRol());
 	}
-
-	@Override
-	public boolean isUserExist(UserDTO user) {
-		return findByName(user.getName()) != null;
-	}
-
-	@Override
-	public List<UserDTO> findAllUsers() {
-		List<UserDTO> users = null;
-		List<User> entitys = userRepository.findAll();
-
-		if (Objects.nonNull(entitys) && !entitys.isEmpty()) {
-			users = new ArrayList<>();
-			for (User user : entitys) {
-				users.add(convertToDTO(user));
-			}
-		}
-
-		return users;
-	}
-
-	public static UserDTO convertToDTO(User user) {
-		UserDTO dto = null;
-		if (Objects.nonNull(user)) {
-			dto = new UserDTO();
-			dto.setId(user.getId());
-			dto.setName(user.getName());
-			dto.setRol(user.getRol());
-		}
-		return dto;
-	}
-
-	public static User convertToEntity(UserDTO user) {
-		User entity = null;
-		if (Objects.nonNull(user)) {
-			entity = new User();
-			entity.setId(user.getId());
-			entity.setName(user.getName());
-			entity.setRol(user.getRol());
-		}
-		return entity;
-	}
+	return entity;
+    }
 
 }
