@@ -1,5 +1,6 @@
 package com.salas.springboot.test;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.salas.springboot.controller.UserController;
 import com.salas.springboot.dto.UserDTO;
@@ -32,6 +32,7 @@ public class UserControllerTest {
     private UserService userService;
 
     UserDTO user;
+    UserDTO newUser;
 
     @Before
     public void setUp() {
@@ -39,6 +40,9 @@ public class UserControllerTest {
 	user.setId(1L);
 	user.setName("David");
 	user.setRol(ErolUsuario.USUARIO);
+	newUser = new UserDTO();
+	newUser.setName("Camilo");
+	newUser.setRol(ErolUsuario.USUARIO);
     }
 
     @Test
@@ -78,14 +82,14 @@ public class UserControllerTest {
 
 	Mockito.when(userService.isUserExist(Mockito.anyObject())).thenReturn(false);
 
-	RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/user", user).accept(MediaType.APPLICATION_JSON);
+	RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/user").contentType(MediaType.APPLICATION_JSON)
+		.content("{\"id\":10,\"name\":\"Camilo\",\"rol\":\"USUARIO\"}");
 
 	MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
 	System.out.println(result.getResponse().getContentAsString());
-	String expected = "{\"id\":1,\"name\":\"David\",\"rol\":\"USUARIO\"}";
 
-	JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
+	Assert.assertTrue(result.getResponse().getContentAsString().equals("true"));
     }
 
 }
