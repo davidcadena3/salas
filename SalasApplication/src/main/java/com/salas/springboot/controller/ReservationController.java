@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.salas.springboot.dto.ReservationDTO;
 import com.salas.springboot.model.Reservation;
 import com.salas.springboot.model.enums.EreservationStatus;
 import com.salas.springboot.service.ReservationService;
@@ -39,12 +40,12 @@ public class ReservationController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Reservation>> listAllReservations() {
-		List<Reservation> reservations = reservaService.findAllReservations();
+	public ResponseEntity<List<ReservationDTO>> listAllReservations() {
+		List<ReservationDTO> reservations = reservaService.findAllReservations();
 		if (reservations.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Reservation>>(reservations, HttpStatus.OK);
+		return new ResponseEntity<List<ReservationDTO>>(reservations, HttpStatus.OK);
 	}
 
 	/**
@@ -53,12 +54,12 @@ public class ReservationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/pending", method = RequestMethod.GET)
-	public ResponseEntity<List<Reservation>> listAllPendingReservations() {
-		List<Reservation> reservations = reservaService.findAllPendingReservations();
+	public ResponseEntity<List<ReservationDTO>> listAllPendingReservations() {
+		List<ReservationDTO> reservations = reservaService.findAllPendingReservations();
 		if (reservations.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Reservation>>(reservations, HttpStatus.OK);
+		return new ResponseEntity<List<ReservationDTO>>(reservations, HttpStatus.OK);
 	}
 
 	/**
@@ -70,12 +71,12 @@ public class ReservationController {
 	@RequestMapping(value = "/room/{roomId}", method = RequestMethod.GET)
 	public ResponseEntity<?> getRoomReservationS(@PathVariable("roomId") long roomId) {
 		logger.info("consultando las reservas de la sala: " + roomId);
-		List<Reservation> reservations = reservaService.findByRoomId(roomId);
+		List<ReservationDTO> reservations = reservaService.findByRoomId(roomId);
 		if (reservations == null || reservations.isEmpty()) {
 			logger.error("Sala: " + roomId + " sin reservas.");
 			return new ResponseEntity(new CustomErrorType("Sala: " + roomId + " sin reservas."), HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<List<Reservation>>(reservations, HttpStatus.OK);
+		return new ResponseEntity<List<ReservationDTO>>(reservations, HttpStatus.OK);
 	}
 
 	/**
@@ -87,13 +88,13 @@ public class ReservationController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getReservation(@PathVariable("id") long id) {
 		logger.info("Consultando la reserva con id: " + id);
-		Reservation reservation = reservaService.findById(id);
+		ReservationDTO reservation = reservaService.findById(id);
 		if (reservation == null) {
 			logger.error("No se encontró reserva con id: " + id);
 			return new ResponseEntity(new CustomErrorType("No se encontró reserva con id: " + id),
 					HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
+		return new ResponseEntity<ReservationDTO>(reservation, HttpStatus.OK);
 	}
 
 	/**
@@ -104,7 +105,8 @@ public class ReservationController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> createReservation(@RequestBody Reservation reservation, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createReservation(@RequestBody ReservationDTO reservation,
+			UriComponentsBuilder ucBuilder) {
 		logger.info("Reserva a crear: " + reservation);
 		SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH");
 		if (reservaService.isReservaExist(reservation)) {
@@ -130,10 +132,10 @@ public class ReservationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateReservation(@PathVariable("id") long id, @RequestBody Reservation reservation) {
+	public ResponseEntity<?> updateReservation(@PathVariable("id") long id, @RequestBody ReservationDTO reservation) {
 		logger.info("Actualizando la reserva con id: " + id);
 
-		Reservation currentReservation = reservaService.findById(id);
+		ReservationDTO currentReservation = reservaService.findById(id);
 
 		if (currentReservation == null) {
 			logger.error("Reserva no encontrada id: " + id);
@@ -146,17 +148,17 @@ public class ReservationController {
 
 		// se valida si existen reservas adicionales para la sala y fecha en
 		// estado pendiente
-		List<Reservation> counterPart = reservaService.findCounterpart(reservation);
+		List<ReservationDTO> counterPart = reservaService.findCounterpart(reservation);
 
 		// de existir
 		if (Objects.nonNull(counterPart) && !counterPart.isEmpty()) {
 			// se eliminan
-			for (Reservation aux : counterPart) {
+			for (ReservationDTO aux : counterPart) {
 				reservaService.deleteReservationById(aux.getId());
 			}
 		}
 
-		return new ResponseEntity<Reservation>(currentReservation, HttpStatus.OK);
+		return new ResponseEntity<ReservationDTO>(currentReservation, HttpStatus.OK);
 	}
 
 	/**
@@ -169,7 +171,7 @@ public class ReservationController {
 	public ResponseEntity<?> deleteReservation(@PathVariable("id") long id) {
 		logger.info("Eliminando reserva con id: " + id);
 
-		Reservation reservation = reservaService.findById(id);
+		ReservationDTO reservation = reservaService.findById(id);
 		if (reservation == null) {
 			logger.error("La reservación con id: " + id + " no exite.");
 			return new ResponseEntity(new CustomErrorType("La reservación con id: " + id + " no exite."),

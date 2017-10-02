@@ -2,15 +2,16 @@ package com.salas.springboot.service;
 
 import java.util.List;
 
+import com.salas.springboot.dto.ReservationDTO;
 import com.salas.springboot.model.Reservation;
 
 public interface ReservationService {
 
-	Reservation findById(Long id);
+	ReservationDTO findById(Long id);
 
-	void saveReservation(Reservation reserva);
+	void saveReservation(ReservationDTO reserva);
 
-	void updateReservation(Reservation reserva);
+	void updateReservation(ReservationDTO reserva);
 
 	void deleteReservationById(Long id);
 
@@ -20,14 +21,14 @@ public interface ReservationService {
 	 * @param id
 	 * @return
 	 */
-	List<Reservation> findByRoomId(Long id);
+	List<ReservationDTO> findByRoomId(Long id);
 
 	/**
 	 * Todas las reservas
 	 * 
 	 * @return
 	 */
-	List<Reservation> findAllReservations();
+	List<ReservationDTO> findAllReservations();
 
 	/**
 	 * Se valida si la reservación existe
@@ -35,14 +36,14 @@ public interface ReservationService {
 	 * @param reservation
 	 * @return
 	 */
-	boolean isReservaExist(Reservation reservation);
+	boolean isReservaExist(ReservationDTO reservation);
 
 	/**
 	 * Todos las reservaciones pendientes
 	 * 
 	 * @return
 	 */
-	List<Reservation> findAllPendingReservations();
+	List<ReservationDTO> findAllPendingReservations();
 
 	/**
 	 * Reservas iguales
@@ -50,6 +51,6 @@ public interface ReservationService {
 	 * @param reservation
 	 * @return
 	 */
-	List<Reservation> findCounterpart(Reservation reservation);
+	List<ReservationDTO> findCounterpart(ReservationDTO reservation);
 
 }

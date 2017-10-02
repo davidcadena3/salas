@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.salas.springboot.model.Room;
+import com.salas.springboot.dto.RoomDTO;
 import com.salas.springboot.service.RoomService;
 import com.salas.springboot.util.CustomErrorType;
 
@@ -34,12 +34,12 @@ public class RoomController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Room>> listAllRooms() {
-		List<Room> rooms = roomService.findAllRooms();
+	public ResponseEntity<List<RoomDTO>> listAllRooms() {
+		List<RoomDTO> rooms = roomService.findAllRooms();
 		if (rooms.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Room>>(rooms, HttpStatus.OK);
+		return new ResponseEntity<List<RoomDTO>>(rooms, HttpStatus.OK);
 	}
 
 	/**
@@ -51,13 +51,13 @@ public class RoomController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getRoom(@PathVariable("id") long id) {
 		logger.info("get room con id {}", id);
-		Room room = roomService.findById(id);
+		RoomDTO room = roomService.findById(id);
 		if (room == null) {
 			logger.error("sala con id {} no encontrada.", id);
 			return new ResponseEntity(new CustomErrorType("sala con id " + id + " no encontrado"),
 					HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Room>(room, HttpStatus.OK);
+		return new ResponseEntity<RoomDTO>(room, HttpStatus.OK);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class RoomController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> createRoom(@RequestBody Room room, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createRoom(@RequestBody RoomDTO room, UriComponentsBuilder ucBuilder) {
 		logger.info("creando sala: {}", room);
 		if (roomService.isRoomExist(room)) {
 			logger.error("La sala " + room.getName() + " ya existe ");

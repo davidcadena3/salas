@@ -2,18 +2,18 @@ package com.salas.springboot.service;
 
 import java.util.List;
 
-import com.salas.springboot.model.Room;
+import com.salas.springboot.dto.RoomDTO;
 
 public interface RoomService {
 
-	Room findById(Long id);
+	RoomDTO findById(Long id);
 
-	Room findByName(String name);
+	RoomDTO findByName(String name);
 
-	void saveRoom(Room room);
+	void saveRoom(RoomDTO room);
 
-	boolean isRoomExist(Room room);
+	boolean isRoomExist(RoomDTO room);
 
-	List<Room> findAllRooms();
+	List<RoomDTO> findAllRooms();
 
 }

@@ -2,18 +2,18 @@ package com.salas.springboot.service;
 
 import java.util.List;
 
-import com.salas.springboot.model.User;
+import com.salas.springboot.dto.UserDTO;
 
 public interface UserService {
 
-	User findById(Long id);
+	UserDTO findById(Long id);
 
-	User findByName(String name);
+	UserDTO findByName(String name);
 
-	void saveUser(User user);
+	void saveUser(UserDTO user);
 
-	boolean isUserExist(User user);
+	boolean isUserExist(UserDTO user);
 
-	List<User> findAllUsers();
+	List<UserDTO> findAllUsers();
 
 }

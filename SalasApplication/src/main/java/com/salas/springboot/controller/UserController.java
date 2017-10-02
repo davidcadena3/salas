@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.salas.springboot.model.User;
+import com.salas.springboot.dto.UserDTO;
 import com.salas.springboot.service.UserService;
 import com.salas.springboot.util.CustomErrorType;
 
@@ -34,12 +34,12 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<User>> listAllUsers() {
-		List<User> users = userService.findAllUsers();
+	public ResponseEntity<List<UserDTO>> listAllUsers() {
+		List<UserDTO> users = userService.findAllUsers();
 		if (users.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		return new ResponseEntity<List<UserDTO>>(users, HttpStatus.OK);
 	}
 
 	/**
@@ -51,13 +51,13 @@ public class UserController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getUser(@PathVariable("id") long id) {
 		logger.info("get usuario con id {}", id);
-		User user = userService.findById(id);
+		UserDTO user = userService.findById(id);
 		if (user == null) {
 			logger.error("usuario con id {} no encontrado.", id);
 			return new ResponseEntity(new CustomErrorType("usuario con id " + id + " no encontrado"),
 					HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createUser(@RequestBody UserDTO user, UriComponentsBuilder ucBuilder) {
 		logger.info("creando usuario: {}", user);
 		if (userService.isUserExist(user)) {
 			logger.error("El usuario " + user.getName() + " ya existe ");

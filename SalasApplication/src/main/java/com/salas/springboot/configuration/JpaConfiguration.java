@@ -27,9 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.salas.springboot.repositories",
-		entityManagerFactoryRef = "entityManagerFactory",
-		transactionManagerRef = "transactionManager")
+@EnableJpaRepositories(basePackages = "com.salas.springboot.repositories", entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
 public class JpaConfiguration {
 
@@ -40,12 +38,13 @@ public class JpaConfiguration {
 	private int maxPoolSize;
 
 	/*
-	 * Populate SpringBoot DataSourceProperties object directly from application.yml 
+	 * Populate SpringBoot DataSourceProperties object directly from
+	 * application.yml
 	 */
 	@Bean
 	@Primary
 	@ConfigurationProperties(prefix = "datasource.sampleapp")
-	public DataSourceProperties dataSourceProperties(){
+	public DataSourceProperties dataSourceProperties() {
 		return new DataSourceProperties();
 	}
 
@@ -55,16 +54,12 @@ public class JpaConfiguration {
 	@Bean
 	public DataSource dataSource() {
 		DataSourceProperties dataSourceProperties = dataSourceProperties();
-			HikariDataSource dataSource = (HikariDataSource) DataSourceBuilder
-					.create(dataSourceProperties.getClassLoader())
-					.driverClassName(dataSourceProperties.getDriverClassName())
-					.url(dataSourceProperties.getUrl())
-					.username(dataSourceProperties.getUsername())
-					.password(dataSourceProperties.getPassword())
-					.type(HikariDataSource.class)
-					.build();
-			dataSource.setMaximumPoolSize(maxPoolSize);
-			return dataSource;
+		HikariDataSource dataSource = (HikariDataSource) DataSourceBuilder.create(dataSourceProperties.getClassLoader())
+				.driverClassName(dataSourceProperties.getDriverClassName()).url(dataSourceProperties.getUrl())
+				.username(dataSourceProperties.getUsername()).password(dataSourceProperties.getPassword())
+				.type(HikariDataSource.class).build();
+		dataSource.setMaximumPoolSize(maxPoolSize);
+		return dataSource;
 	}
 
 	/*
@@ -95,11 +90,15 @@ public class JpaConfiguration {
 	private Properties jpaProperties() {
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", environment.getRequiredProperty("datasource.sampleapp.hibernate.dialect"));
-		properties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("datasource.sampleapp.hibernate.hbm2ddl.method"));
-		properties.put("hibernate.show_sql", environment.getRequiredProperty("datasource.sampleapp.hibernate.show_sql"));
-		properties.put("hibernate.format_sql", environment.getRequiredProperty("datasource.sampleapp.hibernate.format_sql"));
-		if(StringUtils.isNotEmpty(environment.getRequiredProperty("datasource.sampleapp.defaultSchema"))){
-			properties.put("hibernate.default_schema", environment.getRequiredProperty("datasource.sampleapp.defaultSchema"));
+		properties.put("hibernate.hbm2ddl.auto",
+				environment.getRequiredProperty("datasource.sampleapp.hibernate.hbm2ddl.method"));
+		properties.put("hibernate.show_sql",
+				environment.getRequiredProperty("datasource.sampleapp.hibernate.show_sql"));
+		properties.put("hibernate.format_sql",
+				environment.getRequiredProperty("datasource.sampleapp.hibernate.format_sql"));
+		if (StringUtils.isNotEmpty(environment.getRequiredProperty("datasource.sampleapp.defaultSchema"))) {
+			properties.put("hibernate.default_schema",
+					environment.getRequiredProperty("datasource.sampleapp.defaultSchema"));
 		}
 		return properties;
 	}

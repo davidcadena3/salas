@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.salas.springboot.controller.UserController;
+import com.salas.springboot.dto.UserDTO;
 import com.salas.springboot.model.User;
 import com.salas.springboot.model.enums.ErolUsuario;
 
@@ -36,7 +37,7 @@ public class UserTests {
 	public void createUser() {
 		logger.info("start create user test");
 
-		User user = new User();
+		UserDTO user = new UserDTO();
 		user.setId(200L);
 		user.setName("Ricardo");
 		user.setRol(ErolUsuario.USUARIO);
