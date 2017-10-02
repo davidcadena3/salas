@@ -167,12 +167,12 @@ public class ReservationController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteReservation(@PathVariable("id") long id) {
-		logger.info("Fetching & Deleting Reserva with id {}", id);
+		logger.info("Eliminando reserva con id: " + id);
 
 		Reservation reservation = reservaService.findById(id);
 		if (reservation == null) {
-			logger.error("Unable to delete. Reserva with id {} not found.", id);
-			return new ResponseEntity(new CustomErrorType("Unable to delete. Reserva with id " + id + " not found."),
+			logger.error("La reservación con id: " + id + " no exite.");
+			return new ResponseEntity(new CustomErrorType("La reservación con id: " + id + " no exite."),
 					HttpStatus.NOT_FOUND);
 		}
 		reservaService.deleteReservationById(id);
