@@ -25,7 +25,7 @@
   <div class="card-body">
     <h4 class="card-title">Crear sala</h4>
     <p class="card-text">Creación de una nueva sala.</p>
-    <a ui-sref="sala" class="btn btn-primary">Salas</a>
+    <a ui-sref="sala" class="btn btn-primary">Crear sala</a>
   </div>
 </div>
 </div>
